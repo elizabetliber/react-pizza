@@ -22,6 +22,7 @@ function App() {
                 setItems(pizzas)
                 setIsLoading(false)
             })
+        window.scrollTo(0,0)
     }, []);
 
 
