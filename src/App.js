@@ -12,28 +12,15 @@ import NotFoundBlock from "./components/NotFoundBlock";
 
 
 function App() {
-    const [items, setItems] = React.useState([]);
-    const [isLoading, setIsLoading] = React.useState(true)
-
-    React.useEffect(() => {
-        fetch('https://62b0204ae460b79df03d82b6.mockapi.io/items')
-            .then(data => data.json())
-            .then(pizzas => {
-                setItems(pizzas)
-                setIsLoading(false)
-            })
-        window.scrollTo(0,0)
-    }, []);
-
-
-    console.log(items)
+    const [searchValue, setSearchValue] = React.useState('')
+    console.log(searchValue)
     return (
         <div className="wrapper">
-            <Header/>
+            <Header searchValue={searchValue} setSearchValue={setSearchValue}/>
             <div className="content">
                 <div className="container">
                     <Routes>
-                        <Route path="/" element={<Home isLoading={isLoading} items={items}/>}/>
+                        <Route path="/" element={<Home searchValue={searchValue}/>}/>
                         <Route path="*" element={<NotFoundBlock/>}/>
                     </Routes>
                 </div>
