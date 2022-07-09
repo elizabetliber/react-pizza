@@ -3,28 +3,35 @@ import {
     Routes,
     Route
 } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { decrement, increment } from './redux/slices/filterSlice'
 
 import Header from "./components/Header";
 import Home from "./pages/Home";
-import './scss/app.scss';
 import NotFoundBlock from "./components/NotFoundBlock";
 
+import './scss/app.scss';
 
+
+export const MyContext = React.createContext();
 
 function App() {
     const [searchValue, setSearchValue] = React.useState('')
-    console.log(searchValue)
+
+
     return (
         <div className="wrapper">
-            <Header searchValue={searchValue} setSearchValue={setSearchValue}/>
-            <div className="content">
-                <div className="container">
-                    <Routes>
-                        <Route path="/" element={<Home searchValue={searchValue}/>}/>
-                        <Route path="*" element={<NotFoundBlock/>}/>
-                    </Routes>
+            <MyContext.Provider value={{searchValue, setSearchValue }}>
+                <Header/>
+                <div className="content">
+                    <div className="container">
+                        <Routes>
+                            <Route path="/" element={<Home/>}/>
+                            <Route path="*" element={<NotFoundBlock/>}/>
+                        </Routes>
+                    </div>
                 </div>
-            </div>
+            </MyContext.Provider>
         </div>
     );
 }
