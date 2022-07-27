@@ -1,6 +1,13 @@
 import React from 'react';
+import {useDispatch} from "react-redux";
+import {setSortType} from "../redux/slices/filterSlice";
 
-const list = [
+type ListItem = {
+    name: string,
+    sortProperty: string
+}
+
+export const list: ListItem[] = [
     {name: 'популярности (DESC)', sortProperty: 'rating'},
     {name: 'популярности (ASC)', sortProperty: '-rating'},
     {name: 'цене (DESC)', sortProperty: 'price'},
@@ -9,16 +16,31 @@ const list = [
     {name: 'алфавиту (ASC)', sortProperty: '-title'},
 ]
 
-function Sort({value, onClickSortType}) {
+const Sort: React.FC<any> = ({value}) => {
+    const dispatch = useDispatch()
     const [isVisible, setIsVisible] = React.useState(false);
+    const sortRef = React.useRef<HTMLDivElement>(null)
 
-    const onClickListItem = (idx) => {
-        onClickSortType(idx)
+    const onClickListItem = (obj: ListItem) => {
+        dispatch(setSortType(obj))
         setIsVisible(false)
     }
 
+    React.useEffect(() => {
+        const handleClickOutside = (e: any) => {
+            if (!e.path.includes(sortRef.current)) {
+                setIsVisible(false)
+                console.log('outside')
+            }
+        }
+        document.body.addEventListener('click', handleClickOutside)
+
+        return () => {
+            document.body.removeEventListener('click', handleClickOutside)
+        }
+    }, [])
     return (
-        <div className="sort">
+        <div ref={sortRef} className="sort">
             <div className="sort__label">
                 <svg
                     width="10"
